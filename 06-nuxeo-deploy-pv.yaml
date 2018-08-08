@@ -1,0 +1,53 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: nuxeo-binaries
+spec:
+  accessModes:
+  - ReadWriteMany
+  resources:
+    requests:
+      storage: 5Gi
+  storageClassName: shared
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: mynuxeo
+    component: nuxeo
+  name: nuxeo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mynuxeo
+      component: nuxeo
+  template:
+    metadata:
+      labels:
+        app: mynuxeo
+        component: nuxeo
+      name: nuxeo
+    spec:
+      containers:
+        - name: nuxeo
+          env:
+            - name: NUXEO_PACKAGES
+              value: nuxeo-web-ui
+            - name: NUXEO_BINARY_STORE
+              value: /binaries
+          image: 'nuxeo/nuxeo:9.10'
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+
+          volumeMounts:
+          - mountPath: /binaries
+            name: binaries
+      volumes:
+      - name: binaries
+        persistentVolumeClaim:
+          claimName: nuxeo-binaries

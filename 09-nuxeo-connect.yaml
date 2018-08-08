@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: nuxeo-connect
+stringData:
+  connect.properties: |
+    USERNAME=dmetzler
+    PASSWORD=************
+    STUDIO_PROJECT=dmetzler-SANDBOX
+    STUDIO_VERSION=0.0.0-SNAPSHOT

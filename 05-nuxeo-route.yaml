@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: Route
+metadata:
+  name: nuxeo-route
+spec:
+  host: mynuxeo.apps.prod.nuxeo.io
+  to:
+    kind: Service
+    name: nuxeo
